@@ -1,0 +1,5 @@
+sample.db
+.project
+.classpath
+target/*
+logs/*
