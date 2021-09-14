@@ -1,5 +1,6 @@
 sample.db
 .project
 .classpath
+.settings/*
 target/*
 logs/*
