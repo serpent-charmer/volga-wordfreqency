@@ -21,6 +21,8 @@ jobs:
         command: mvn test
 
   build:
+    requires:
+      - test
     docker:
       # specify the version you desire here
       - image: maven:3.8.2-openjdk-16
