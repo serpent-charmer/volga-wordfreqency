@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class WordCacheReader extends WordReader {
 
@@ -14,9 +13,6 @@ public class WordCacheReader extends WordReader {
 	}
 
 	public void read(Connection con, PrintStream printer) throws SQLException {
-
-		Statement statement = con.createStatement();
-		statement.setQueryTimeout(30);
 
 		String filehash = Utils.getMd5Hash(this.path);
 		PreparedStatement query = con

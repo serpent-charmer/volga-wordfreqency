@@ -110,7 +110,7 @@ public class App {
 					LoggerInstance.logger.info("Reading from file");
 					new WordFileReader(canpath).read(con, System.out);
 					con.commit();
-					System.out.println("Run again to read from cache");
+					new WordCacheReader(canpath).read(con, System.out);
 				} else {
 					LoggerInstance.logger.info("Reading from cache");
 					new WordCacheReader(canpath).read(con, System.out);

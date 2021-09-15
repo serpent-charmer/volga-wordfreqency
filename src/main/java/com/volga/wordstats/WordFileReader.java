@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -21,9 +20,6 @@ public class WordFileReader extends WordReader {
 	}
 
 	public void read(Connection con, PrintStream printer) throws SQLException {
-
-		Statement statement = con.createStatement();
-		statement.setQueryTimeout(30);
 
 		PreparedStatement insrt = con.prepareStatement("insert into wordstat values(NULL, ?, ?, ?, ?);");
 		PreparedStatement upd = con.prepareStatement("update wordstat set frequency = frequency+1 where id = ?;");
