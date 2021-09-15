@@ -108,11 +108,11 @@ public class App {
 					del.setString(1, canpath);
 					del.executeUpdate();
 					LoggerInstance.logger.info("Reading from file");
-					new WordFileReader(canpath).read(con);
+					new WordFileReader(canpath).read(con, System.out);
 					con.commit();
 				} else {
 					LoggerInstance.logger.info("Reading from cache");
-					new WordCacheReader(canpath).read(con);
+					new WordCacheReader(canpath).read(con, System.out);
 				}
 
 			} catch (SQLException e) {

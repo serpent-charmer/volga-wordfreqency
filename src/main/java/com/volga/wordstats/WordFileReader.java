@@ -1,6 +1,7 @@
 package com.volga.wordstats;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -19,7 +20,7 @@ public class WordFileReader extends WordReader {
 		super(path);
 	}
 
-	public void read(Connection con) throws SQLException {
+	public void read(Connection con, PrintStream printer) throws SQLException {
 
 		Statement statement = con.createStatement();
 		statement.setQueryTimeout(30);

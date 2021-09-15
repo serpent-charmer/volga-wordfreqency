@@ -1,5 +1,6 @@
 package com.volga.wordstats;
 
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ public class WordCacheReader extends WordReader {
 		super(path);
 	}
 
-	public void read(Connection con) throws SQLException {
+	public void read(Connection con, PrintStream printer) throws SQLException {
 
 		Statement statement = con.createStatement();
 		statement.setQueryTimeout(30);
@@ -25,7 +26,7 @@ public class WordCacheReader extends WordReader {
 
 		try (ResultSet rs = query.executeQuery()) {
 			while (rs.next()) {
-				System.out.println(rs.getString("word") + " " + rs.getInt("frequency"));
+				printer.printf("%s %s\n", rs.getString("word"), rs.getInt("frequency"));
 				LoggerInstance.logger.info(rs.getString("word") + " " + rs.getInt("frequency"));
 			}
 		}
