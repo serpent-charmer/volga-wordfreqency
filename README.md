@@ -2,17 +2,19 @@
 
 [![CircleCI](https://circleci.com/gh/serpent-charmer/volga-wordfrequency/tree/master.svg?style=shield)](https://circleci.com/gh/serpent-charmer/volga-wordfrequency/?branch=master)
 
-Ниже представлены ссылки на CI, содержащие успешно пройденный тест и собранный JAR-файл.  
+Ниже представлены ссылки на тест и на CI, содержащий собранный JAR-файл.  
 Для запуска программы требуется Java 16.
 
-[Тест](https://app.circleci.com/pipelines/github/serpent-charmer/volga-wordfrequency/17/workflows/5bc899f8-defa-443b-8b48-dd0399af181c/jobs/21)  
 [Код теста](https://github.com/serpent-charmer/volga-wordfrequency/blob/master/src/test/java/com/volga/wordstats/AppTest.java)  
-[Jar](https://app.circleci.com/pipelines/github/serpent-charmer/volga-wordfrequency/17/workflows/5bc899f8-defa-443b-8b48-dd0399af181c/jobs/20/artifacts)
+[Jar](https://25-406640303-gh.circle-artifacts.com/0/target/volga-1.0-SNAPSHOT-jar-with-dependencies.jar)
+
+Запуск тестов: `mvn test`
+
+Сборка JAR-файла: `mvn clean compile assembly:single`
 
 Использование:
 
 `java -jar volga-1.0-SNAPSHOT-jar-with-dependencies.jar --file=путь_до_файла`  
-
 
 
 Перед использованием в консоли рекомендуется поменять кодировку на UTF-8:
