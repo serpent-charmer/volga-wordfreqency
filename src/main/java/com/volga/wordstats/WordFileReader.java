@@ -27,7 +27,7 @@ public class WordFileReader extends WordReader {
 
 		PreparedStatement insrt = con.prepareStatement("insert into wordstat values(NULL, ?, ?, ?, ?);");
 		PreparedStatement upd = con.prepareStatement("update wordstat set frequency = frequency+1 where id = ?;");
-		PreparedStatement check = con.prepareStatement("select id from wordstat where word = ?;");
+		PreparedStatement check = con.prepareStatement("select id from wordstat where word = ? and filehash = ?;");
 
 		String filehash = Utils.getMd5Hash(this.path);
 
@@ -40,6 +40,7 @@ public class WordFileReader extends WordReader {
 
 				try {
 					check.setString(1, v);
+					check.setString(2, filehash);
 					try (ResultSet rs = check.executeQuery()) {
 						if (rs.next()) {
 							upd.setInt(1, rs.getInt("id"));
