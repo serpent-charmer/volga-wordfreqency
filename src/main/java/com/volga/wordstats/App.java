@@ -29,12 +29,6 @@ public class App {
 
 	public static void cli(String[] args) {
 		
-		try {
-		    System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-		    throw new InternalError("VM does not support mandatory encoding UTF-8");
-		}
-		
 		Options options = new Options();
 
 		Option file = Option.builder().argName("file").hasArg().required(true).longOpt("file")
@@ -89,27 +83,36 @@ public class App {
 			}
 
 			try (Connection con = DriverManager.getConnection("jdbc:sqlite:sample.db")) {
+				
+				con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+				con.setAutoCommit(false);
 
 				PreparedStatement stmt = con
 						.prepareStatement("select distinct filehash from wordstat where filepath = ?");
 
 				stmt.setString(1, canpath);
 
-				ResultSet rs = stmt.executeQuery();
+				try(ResultSet rs = stmt.executeQuery()) {
+					while (rs.next()) {
 
-				while (rs.next()) {
-
-					String fhash = rs.getString("filehash");
-					if (fhash.equals(Utils.getMd5Hash(canpath))) {
-						fromCache = true;
+						String fhash = rs.getString("filehash");
+						if (fhash.equals(Utils.getMd5Hash(canpath))) {
+							fromCache = true;
+						}
+						
 					}
-					
 				}
 				
 				if(!fromCache) {
 					PreparedStatement del = con.prepareStatement("delete from wordstat where filepath = ?");
 					del.setString(1, canpath);
 					del.executeUpdate();
+					LoggerInstance.logger.info("Reading from file");
+					new WordFileReader(canpath).read(con);
+					con.commit();
+				} else {
+					LoggerInstance.logger.info("Reading from cache");
+					new WordCacheReader(canpath).read(con);
 				}
 
 			} catch (SQLException e) {
@@ -119,14 +122,6 @@ public class App {
 				System.exit(1);
 			}
 
-			if (cmd.hasOption("c") || fromCache) {
-				LoggerInstance.logger.info("Reading from cache");
-				new WordCacheReader(f).read();
-			} else {
-				LoggerInstance.logger.info("Reading from file");
-				new WordFileReader(canpath).read();
-			}
-
 		} catch (ParseException e) {
 			formatter.printHelp("wordfreq", options);
 		}
@@ -134,6 +129,13 @@ public class App {
 	}
 
 	public static void main(String[] args) {
+		
+		try {
+			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new InternalError("VM does not support mandatory encoding UTF-8");
+		}
+		
 		cli(args);
 	}
 }
