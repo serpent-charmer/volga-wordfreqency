@@ -51,14 +51,14 @@ public class App {
 
 			String canpath = null;
 			try {
-				canpath = new File(f).getCanonicalPath();
+				File fc = new File(f);
+				if(!fc.exists())
+					throw new IOException();
+				canpath = fc.getCanonicalPath();
 			} catch (IOException e) {
-				LoggerInstance.logger.error("File " + f + " is not found");
-				LoggerInstance.logger.catching(e);
+				System.out.println("File " + f + " is not found");
 				System.exit(1);
 			}
-
-//			System.out.println(f);
 
 			File dbs = new File("sample.db");
 
@@ -110,6 +110,7 @@ public class App {
 					LoggerInstance.logger.info("Reading from file");
 					new WordFileReader(canpath).read(con, System.out);
 					con.commit();
+					System.out.println("Run again to read from cache");
 				} else {
 					LoggerInstance.logger.info("Reading from cache");
 					new WordCacheReader(canpath).read(con, System.out);
