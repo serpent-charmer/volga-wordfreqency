@@ -4,6 +4,16 @@
 #
 version: 2
 jobs:
+  test:
+    docker:
+      # specify the version you desire here
+      - image: maven:3.8.2-openjdk-16
+    steps:
+    - checkout
+    - run: 
+        name: Maven Test
+        command: mvn test
+
   build:
     docker:
       # specify the version you desire here
@@ -23,7 +33,7 @@ jobs:
     steps:
       - checkout
       - run: 
-         name: Maven Test And Build
-         command: mvn test && mvn clean compile assembly:single
+         name: Maven Build
+         command: mvn clean compile assembly:single
       - store_artifacts: # Upload test results for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: target/volga-1.0-SNAPSHOT-jar-with-dependencies.jar
