@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/serpent-charmer/volga-wordfrequency/tree/master.svg?style=shield)](https://circleci.com/gh/serpent-charmer/volga-wordfrequency/?branch=master)
 
+[Текст задания](https://www.volga-it.org/wp-content/plugins/wp-olymp/files/6dc231a7cf2dbaa94ed5b5a40590d025.pdf)
+
 Архитектура проекта состоит из двух классов, WordFileReader и WordCacheReader, c иерархией вида WordReader->IWordReader.  
 Присутствует примитивный Inversion of Control: классы для подсчета слов и чтения кэша не создают зависимости сами,  
 а получают их извне в методе read.
