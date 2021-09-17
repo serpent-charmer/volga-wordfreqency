@@ -102,9 +102,12 @@ public class App {
 					while (rs.next()) {
 
 						String fhash = rs.getString("filehash");
-						if (fhash.equals(Utils.getMd5Hash(canpath))) {
+						String other_fhash = Utils.getMd5Hash(canpath);
+						if (fhash.equals(other_fhash)) {
 							fromCache = true;
 						}
+						
+						System.out.println(fhash + " " + other_fhash + " " + fromCache);
 						
 					}
 				} finally  {
@@ -115,6 +118,7 @@ public class App {
 					PreparedStatement del = con.prepareStatement("delete from wordstat where filepath = ?");
 					del.setString(1, canpath);
 					del.executeUpdate();
+					del.close();
 					LoggerInstance.logger.info("Reading from file");
 					new WordFileReader(canpath).read(con, System.out);
 					new WordCacheReader(canpath).read(con, System.out);
