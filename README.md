@@ -20,7 +20,7 @@ public interface IWordReader {
 Для запуска программы требуется Java 16.
 
 [Код тестов](https://github.com/serpent-charmer/volga-wordfrequency/blob/master/src/test/java/com/volga/wordstats/AppTest.java)  
-[Jar](https://30-406640303-gh.circle-artifacts.com/0/target/volga-1.0-SNAPSHOT-jar-with-dependencies.jar)
+[Jar](https://54-406640303-gh.circle-artifacts.com/0/target/volga-1.0-SNAPSHOT-jar-with-dependencies.jar)
 
 Запуск тестов:  
 `mvn test`
