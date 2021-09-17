@@ -57,6 +57,10 @@ public class WordFileReader extends WordReader {
 
 		} catch (IOException e) {
 			LoggerInstance.logger.catching(e);
+		} finally {
+			insrt.close();
+			upd.close();
+			check.close();
 		}
 	}
 }

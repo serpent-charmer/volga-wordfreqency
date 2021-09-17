@@ -20,6 +20,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteConfig.JournalMode;
+import org.sqlite.SQLiteConfig.TempStore;
 
 /**
  * Hello world!
@@ -69,11 +72,12 @@ public class App {
 				try (Connection con = DriverManager.getConnection("jdbc:sqlite:sample.db")) {
 
 					Statement statement = con.createStatement();
-					statement.setQueryTimeout(30);
 
 					statement.executeUpdate(
 							"create table wordstat(id integer, filepath string, filehash string, word string, frequency integer, primary key (id));");
 
+					statement.close();
+					
 				} catch (SQLException e) {
 					LoggerInstance.logger.error("Error while setting up db");
 					LoggerInstance.logger.catching(e);
@@ -82,10 +86,12 @@ public class App {
 				}
 			}
 
-			try (Connection con = DriverManager.getConnection("jdbc:sqlite:sample.db")) {
-				
-				con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-				con.setAutoCommit(false);
+			
+			SQLiteConfig config = new SQLiteConfig();
+			config.setTempStore(TempStore.FILE);
+			config.setJournalMode(JournalMode.WAL);
+			
+			try (Connection con = DriverManager.getConnection("jdbc:sqlite:sample.db", config.toProperties())) {
 
 				PreparedStatement stmt = con
 						.prepareStatement("select distinct filehash from wordstat where filepath = ?");
@@ -101,6 +107,8 @@ public class App {
 						}
 						
 					}
+				} finally  {
+					stmt.close();
 				}
 				
 				if(!fromCache) {
@@ -109,7 +117,6 @@ public class App {
 					del.executeUpdate();
 					LoggerInstance.logger.info("Reading from file");
 					new WordFileReader(canpath).read(con, System.out);
-					con.commit();
 					new WordCacheReader(canpath).read(con, System.out);
 				} else {
 					LoggerInstance.logger.info("Reading from cache");
