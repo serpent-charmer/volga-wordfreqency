@@ -29,7 +29,7 @@ public interface IWordReader {
 `mvn clean compile assembly:single`
 
 Использование:
-`java -jar volga-1.0-SNAPSHOT-jar-with-dependencies.jar --file=путь_до_файла`  
+`java -jar wordfreq.jar --file=путь_до_файла`  
 
 Перед использованием в консоли рекомендуется поменять кодировку на UTF-8:  
 `chcp 65001` в cmd  
